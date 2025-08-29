@@ -1,6 +1,7 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL; // URL del backend desde .env
 
-export async function login(email, password) { // CAMBIO: username → email
+// LOGIN: envía credenciales y recibe token
+export async function login(email, password) {
   try {
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
@@ -8,25 +9,27 @@ export async function login(email, password) { // CAMBIO: username → email
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
-      body: JSON.stringify({ email, password }), // CAMBIO
+      body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {
-      throw new Error("Email o contraseña incorrectos"); // CAMBIO
+      throw new Error("Email o contraseña incorrectos");
     }
 
     const data = await response.json();
-    localStorage.setItem("token", data.token);
-    return data;
+    return data; // Devuelve el token y/o datos
   } catch (error) {
     console.error("Error en login:", error);
     throw error;
   }
 }
 
+// OBTENER DATOS DEL USUARIO AUTENTICADO
 export async function getUserData() {
   try {
     const token = localStorage.getItem("token");
+    if (!token) throw new Error("No hay token");
+
     const res = await fetch(`${API_URL}/user`, {
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -38,11 +41,12 @@ export async function getUserData() {
 
     return await res.json();
   } catch (error) {
-    console.error(error);
+    console.error("Error getUserData:", error);
     throw error;
   }
 }
 
-export async function logout() {
+// LOGOUT: borra token del almacenamiento
+export function logout() {
   localStorage.removeItem("token");
 }

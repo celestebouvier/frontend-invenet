@@ -1,4 +1,4 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-export const useAuth = () => useContext(AuthContext); //hook personalizado que hace más fácil acceder al contexto
+export const useAuth = () => useContext(AuthContext); // hook que guarda si el usuario está logueado, su token, etc.

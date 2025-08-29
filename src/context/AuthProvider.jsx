@@ -1,41 +1,42 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
+import * as authService from "../services/authService"; // Importa servicios
 
 export default function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);   // Estado global usuario
   const [loading, setLoading] = useState(true);
 
+  // Al iniciar la app, intenta cargar datos de usuario si hay token guardado
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) setUser({ token });
+    if (token) {
+      authService.getUserData()
+        .then(data => setUser(data))
+        .catch(() => authService.logout());
+    }
     setLoading(false);
   }, []);
 
+  // LOGIN usando servicio
   const login = async (email, password) => {
     try {
-      const res = await fetch("http://localhost:8000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ email, password }), // CAMBIO: username → email
-      });
-
-      if (!res.ok) throw new Error("Email o contraseña incorrectos");
-
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      setUser({ token: data.token });
+      const data = await authService.login(email, password);
+      localStorage.setItem("token", data.token); // Guardar token
+      const userData = await authService.getUserData(); // Obtener datos usuario
+      setUser(userData);
       navigate("/dashboard");
-      return data;
+      return userData;
     } catch (error) {
       console.error("Error login:", error);
       throw error;
     }
   };
 
+  // LOGOUT usando servicio
   const logout = () => {
-    localStorage.removeItem("token");
+    authService.logout();
     setUser(null);
     navigate("/login");
   };
