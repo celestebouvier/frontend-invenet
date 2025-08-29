@@ -6,17 +6,17 @@ import { login } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState(""); // CAMBIO: username → email
+  const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
-      await login(email, password); // CAMBIO: username → email
+      await login(email, password); 
       navigate("/dashboard");
     } catch {
-      setError("Email o contraseña incorrectos"); // CAMBIO: mensaje
+      setError("Email o contraseña incorrectos"); 
     }
   };
 
@@ -32,9 +32,9 @@ export default function Login() {
         </h1>
 
         <Input
-          type="email" // CAMBIO: type="text" → type="email"
+          type="email" 
           placeholder="Correo electrónico"
-          value={email} // CAMBIO
+          value={email} 
           onChange={(e) => setEmail(e.target.value)} 
         />
 
@@ -44,7 +44,7 @@ export default function Login() {
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="text-black text-base" // tamaño de texto dentro del input más legible.
+            className="text-black text-base" //  texto negro de tamaño base 16px
           />
         </div>
 
