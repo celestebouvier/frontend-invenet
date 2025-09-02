@@ -1,30 +1,28 @@
 import { useAuth } from "../hooks/useAuth";
-import Card from "../components/Card";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
+
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
 
-  return (
-    <div className="min-h-screen p-6 bg-gray-50">
-      <div className="max-w-5xl mx-auto">
-        <header className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-green-700">
-            Panel Invenet - {user?.token ? "Usuario logueado" : "Invitado"}
-          </h1>
-          <button
-            onClick={logout}
-            className="px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-900"
-          >
-            Cerrar sesión
-          </button>
-        </header>
+ return (
+    <div className="flex h-screen">
+      <Sidebar />
 
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-          <Card>Dispositivos (mock)</Card>
-          <Card>Reportes (mock)</Card>
-          <Card>Órdenes (mock)</Card>
-          <Card>Usuarios (admin) (mock)</Card>
-        </div>
+      <div className="flex-1 flex flex-col">
+        <Header user={user} logout={logout} />
+
+        {/* Contenido principal */}
+        <main className="flex-1 p-6 bg-white flex flex-col items-center justify-center">
+          <img src="/logo.png" alt="Logo Invenet" className="w-40 mb-4" />
+          <h2 className="text-3xl font-bold text-invenetGreen">Invenet</h2>
+        </main>
+
+        {/* Footer */}
+        <footer className="text-center py-2 text-sm border-t bg-gray-50">
+          Copyright © 3° TSAFSI 2025. Todos los derechos reservados.
+        </footer>
       </div>
     </div>
   );

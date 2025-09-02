@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import RecoverPassword from "./pages/RecoverPassword";
+import ModificarDatosUsuario from "./pages/ModificarDatosUsuario";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/recover-password" element={<RecoverPassword />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/usuarios/id" element={<ModificarDatosUsuario />} />
     </Routes>
   );
 }

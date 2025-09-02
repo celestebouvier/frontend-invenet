@@ -18,11 +18,13 @@
 body {
   margin: 0;
   display: flex;
+  flex-direction: column; 
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #ffffff; /* mismo color que las tarjetas */
-  color: #213547; /* texto negro/oscuro por defecto */
+  height: 100vh; 
+  background-color: #ffffff; 
+  color: #213547;
   font-family: inherit;
 }
 
@@ -34,12 +36,8 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #ffffff;
   text-decoration: none;
-}
-a:hover {
-  color: #535bf2;
-  text-decoration: underline;
 }
 
 button {
@@ -55,7 +53,7 @@ button {
   transition: all 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #ffffff;
   background-color: #333333;
 }
 button:focus,
@@ -74,7 +72,7 @@ input, textarea {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #ffffff;
   }
   button {
     background-color: #1a1a1a;

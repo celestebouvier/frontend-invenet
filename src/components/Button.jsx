@@ -3,7 +3,7 @@ export default function Button({ text, onClick, className }) {
     <button
       type="button"
       onClick={onClick}
-      className={`w-full bg-green-600 hover:bg-green-700 text-white rounded-md transition duration-200 ${className}`}
+      className={`w-full bg-[#08782b] hover:bg-[#08782b] text-white rounded-md transition duration-200 ${className}`}
     >
       {text}
     </button>

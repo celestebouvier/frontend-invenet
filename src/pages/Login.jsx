@@ -55,7 +55,7 @@ export default function Login() {
         </div>
 
         <div className="mt-4 text-center">
-          <a href="#" className="text-sm text-blue-600 hover:underline">
+          <a href="/password/send-code" className="text-sm text-blue-600 hover:underline">
             ¿Olvidaste tu contraseña?
           </a>
         </div>

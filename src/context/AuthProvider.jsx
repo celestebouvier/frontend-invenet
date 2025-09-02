@@ -8,7 +8,7 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);   // Estado global usuario
   const [loading, setLoading] = useState(true);
 
-  // Al iniciar la app, intenta cargar datos de usuario si hay token guardado
+  // Al iniciar la app, verifica si hay token en el localStorage e intenta cargar datos de usuario si hay token guardado
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -38,7 +38,7 @@ export default function AuthProvider({ children }) {
   const logout = () => {
     authService.logout();
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
