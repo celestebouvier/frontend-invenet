@@ -1,30 +1,29 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
-import * as authService from "../services/authService"; // Importa servicios
+import * as authService from "../services/authService";
 
 export default function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);   // Estado global usuario
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Al iniciar la app, verifica si hay token en el localStorage e intenta cargar datos de usuario si hay token guardado
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      authService.getUserData()
-        .then(data => setUser(data))
+      authService
+        .getUserData()
+        .then((data) => setUser(data))
         .catch(() => authService.logout());
     }
     setLoading(false);
   }, []);
 
-  // LOGIN usando servicio
   const login = async (email, password) => {
     try {
       const data = await authService.login(email, password);
-      localStorage.setItem("token", data.token); // Guardar token
-      const userData = await authService.getUserData(); // Obtener datos usuario
+      localStorage.setItem("token", data.token);
+      const userData = await authService.getUserData();
       setUser(userData);
       navigate("/dashboard");
       return userData;
@@ -34,7 +33,6 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  // LOGOUT usando servicio
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -42,8 +40,9 @@ export default function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 }
+

@@ -1,100 +1,89 @@
-import { useState } from "react"; 
-import Input from "../components/Input";
-import Button from "../components/Button";
-import Card from "../components/Card";
-import { useAuth } from "../hooks/useAuth";
+import { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function ModificarDatosUsuario() {
-  const token = localStorage.getItem("token");
-  const {user, setUser } = useAuth();
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const { user, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
- const aceptarModificar = async () => {
-    setLoading(true);
-    setErrors({});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: ""
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({ name: user.name, email: user.email });
+      setLoading(false);
+    }
+  }, [user]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
-      const response = await fetch("/api/usuario", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
-      });
-
-const data = await response.json();
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:8000/api/usuarios/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
-        if (response.status === 422) {
-          // Errores de validación
-          setErrors(data.errors || {});
-        } else {
-          alert("Ocurrió un error al actualizar los datos.");
-        }
-        return;
+        throw new Error("Error al actualizar usuario");
       }
 
-      // Datos actualizados correctamente
-      setUser(data.user); // actualiza el usuario en el contexto
-      alert("Datos actualizados correctamente.");
+      const updatedUser = await response.json();
+      setUser(updatedUser); // actualizar en contexto
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error:", error);
-      alert("Error de red al intentar actualizar los datos.");
-    } finally {
-      setLoading(false);
     }
   };
 
+  if (loading) return <p>Cargando...</p>;
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
-      <Card className="w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4 text-center">Modificar datos</h2>
-
-        <Input
+    <div className="p-6 max-w-md mx-auto bg-white shadow rounded">
+      <h2 className="text-xl font-bold mb-4">Modificar mis datos</h2>
+      <form onSubmit={handleSubmit}>
+        <label className="block mb-2">Nombre</label>
+        <input
           type="text"
-          placeholder="Nombre"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          error={errors.nombre?.[0]}
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full border p-2 rounded mb-4"
         />
 
-        <Input
+        <label className="block mb-2">Correo</label>
+        <input
           type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email?.[0]}
-          className="mt-4"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full border p-2 rounded mb-4"
         />
 
-        <Input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={errors.password?.[0]}
-          className="mt-4"
-        />
-
-        <div className="mt-6">
-          <Button
-            text={loading ? "Guardando..." : "Aceptar"}
-            onClick={aceptarModificar}
-            className="text-base py-2"
-            disabled={loading}
-          />
-        </div>
-      </Card>
+        <button
+          type="submit"
+          className="bg-green-600 text-white w-full py-2 rounded hover:bg-green-700"
+        >
+          Guardar cambios
+        </button>
+      </form>
     </div>
   );
 }
