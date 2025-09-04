@@ -3,7 +3,8 @@ const API_URL = import.meta.env.VITE_API_BASE_URL; // URL del backend desde .env
 // LOGIN: envía credenciales y recibe token
 export async function login(email, password) {
   try {
-    const response = await fetch(`${API_URL}/api/login`, {
+  
+    const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -11,7 +12,7 @@ export async function login(email, password) {
       },
       body: JSON.stringify({ email, password }),
     });
-
+console.log (response)
     if (!response.ok) {
       throw new Error("Email o contraseña incorrectos");
     }
@@ -30,7 +31,7 @@ export async function getUserData() {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No hay token");
 
-    const res = await fetch(`${API_URL}/api/user`, {
+    const res = await fetch(`${API_URL}/usuarios`, {
       headers: {
         "Authorization": `Bearer ${token}`,
         "Accept": "application/json",
