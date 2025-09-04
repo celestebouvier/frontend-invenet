@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL; // URL del backend desde .env
 // LOGIN: envía credenciales y recibe token
 export async function login(email, password) {
   try {
-    const response = await fetch(`${API_URL}/login`, {
+    const response = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export async function login(email, password) {
     }
 
     const data = await response.json();
-    return data; // Devuelve el token y/o datos
+    return data; // Devuelve { access_token, token_type }
   } catch (error) {
     console.error("Error en login:", error);
     throw error;
@@ -30,11 +30,11 @@ export async function getUserData() {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No hay token");
 
-    const res = await fetch(`${API_URL}/user`, {
+    const res = await fetch(`${API_URL}/api/user`, {
       headers: {
         "Authorization": `Bearer ${token}`,
-        "Accept": "application/json"
-      }
+        "Accept": "application/json",
+      },
     });
 
     if (!res.ok) throw new Error("Error al obtener datos del usuario");
@@ -50,3 +50,5 @@ export async function getUserData() {
 export function logout() {
   localStorage.removeItem("token");
 }
+
+

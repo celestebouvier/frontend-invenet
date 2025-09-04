@@ -22,7 +22,7 @@ export default function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const data = await authService.login(email, password);
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.access_token);
       const userData = await authService.getUserData();
       setUser(userData);
       navigate("/dashboard");
@@ -45,4 +45,7 @@ export default function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+
+
 

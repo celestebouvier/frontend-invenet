@@ -9,7 +9,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
   const { login } = useAuth(); // login viene del contexto
 
   const handleLogin = async () => {
@@ -64,3 +63,5 @@ export default function Login() {
     </div>
   );
 }
+
+
