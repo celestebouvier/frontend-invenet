@@ -1,12 +1,13 @@
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 export default function ModificarDatosUsuario() {
   const { id } = useParams();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: ""
@@ -56,6 +57,13 @@ export default function ModificarDatosUsuario() {
   if (loading) return <p>Cargando...</p>;
 
   return (
+    <div className="flex h-screen bg-gray-100">
+          <Sidebar />
+          
+    <div className="flex-1 flex flex-col">
+    <Header user={user} logout={logout} />
+    </div>
+    
     <div className="p-6 max-w-md mx-auto bg-white shadow rounded">
       <h2 className="text-xl font-bold mb-4">Modificar mis datos</h2>
       <form onSubmit={handleSubmit}>
@@ -84,6 +92,7 @@ export default function ModificarDatosUsuario() {
           Guardar cambios
         </button>
       </form>
+    </div>
     </div>
   );
 }
