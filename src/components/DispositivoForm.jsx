@@ -4,6 +4,7 @@ import Button from "./Button";
 
 export default function DispositivoForm({ mode = "crear" }) {
   const { id } = useParams();
+  const token = localStorage.getItem("token");
   const [dispositivo, setDispositivo] = useState({
     tipo: "",
     marca: "",
@@ -15,65 +16,88 @@ export default function DispositivoForm({ mode = "crear" }) {
   });
   const [mensaje, setMensaje] = useState("");
   const [errores, setErrores] = useState({});
-  const [enums, setEnums] = useState({
-    tipo: [],
-    marca: [],
-    sala: [],
-    estado: [],
-  });
+  const [marcas, setMarcas] = useState([]);
 
+   // Enums fijos para crear dispositivo
+  const tipos = ["CPU", "Netbook", "Televisor", "Proyector", "Monitor", "Router", "Switch"];
+  const salas = [
+    "Sala Informática 1",
+    "Sala Informática 2",
+    "Sala Informática 3",
+    "Sala Multimedia 1",
+    "Sala Multimedia 2",
+    "Sala Multimedia 3",
+    "Otro"
+  ];
+  const estados = ["Activo", "Inactivo", "En reparación"];
+
+    // Fetch de marcas
   useEffect(() => {
-    const fetchEnums = async () => {
+    if (!token) return; // no intenta fetch si no hay token
+    const fetchMarcas = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/dispositivos/enums");
-        if (!res.ok) throw new Error("Error al cargar enums");
+        const res = await fetch("http://localhost:8000/api/marcas", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) throw new Error("Error al cargar marcas");
         const data = await res.json();
-        setEnums(data);
+        setMarcas(data);
       } catch (err) {
         console.error(err.message);
       }
     };
-    fetchEnums();
-  }, []);
+    fetchMarcas();
+  }, [token]);
 
+  //Fetch de un dispositivo específico
   useEffect(() => {
-    if (!id) return;
-    const fetchDispositivo = async () => {
-      try {
-        const res = await fetch(`http://localhost:8000/api/dispositivos/${id}`);
-        if (!res.ok) throw new Error("Dispositivo no encontrado");
-        const data = await res.json();
-        setDispositivo(data);
-      } catch (err) {
-        setMensaje(err.message);
-      }
-    };
-    fetchDispositivo();
-  }, [id]);
+  if (!id || !token) return;
+  const fetchDispositivo = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/dispositivos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Dispositivo no encontrado");
+      const data = await res.json();
+      setDispositivo(data);
+    } catch (err) {
+      setMensaje(err.message);
+    }
+  };
+  fetchDispositivo();
+}, [id, token]);
 
   const validarCampos = () => {
     const nuevosErrores = {};
     if (mode !== "eliminar") {
       if (!dispositivo.modelo.trim()) nuevosErrores.modelo = "El modelo es obligatorio";
-      if (!dispositivo.descripcion.trim()) nuevosErrores.descripcion = "La descripción es obligatoria";
       if (!dispositivo.nro_serie.trim()) nuevosErrores.nro_serie = "El número de serie es obligatorio";
-      if (!enums.tipo.includes(dispositivo.tipo)) nuevosErrores.tipo = "Seleccione un tipo válido";
-      if (!enums.marca.includes(dispositivo.marca)) nuevosErrores.marca = "Seleccione una marca válida";
-      if (!enums.sala.includes(dispositivo.ubicacion)) nuevosErrores.ubicacion = "Seleccione una sala válida";
-      if (!enums.estado.includes(dispositivo.estado)) nuevosErrores.estado = "Seleccione un estado válido";
+      if (!tipos.includes(dispositivo.tipo)) nuevosErrores.tipo = "Seleccione un tipo válido";
+      if (!dispositivo.marca) nuevosErrores.marca = "Seleccione una marca válida";
+      if (!salas.includes(dispositivo.ubicacion)) nuevosErrores.ubicacion = "Seleccione una sala válida";
+      if (!estados.includes(dispositivo.estado)) nuevosErrores.estado = "Seleccione un estado válido";
     }
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
 
+  //Crear dispositivo
   const crearDispositivo = async () => {
     if (!validarCampos()) return;
     try {
       const res = await fetch("http://localhost:8000/api/dispositivos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dispositivo),
-      });
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        body: JSON.stringify(dispositivo),});
       if (!res.ok) throw new Error("Error al crear dispositivo");
       setMensaje("Dispositivo creado correctamente");
       setDispositivo({
@@ -91,12 +115,17 @@ export default function DispositivoForm({ mode = "crear" }) {
     }
   };
 
+
+  //Modificar dispositivo
   const modificarDispositivo = async () => {
     if (!validarCampos()) return;
     try {
       const res = await fetch(`http://localhost:8000/api/dispositivos/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(dispositivo),
       });
       if (!res.ok) throw new Error("Error al actualizar");
@@ -110,6 +139,9 @@ export default function DispositivoForm({ mode = "crear" }) {
     try {
       const res = await fetch(`http://localhost:8000/api/dispositivos/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!res.ok) throw new Error("Error al eliminar");
       setMensaje("Dispositivo eliminado correctamente");
@@ -136,7 +168,7 @@ export default function DispositivoForm({ mode = "crear" }) {
          "Eliminar Dispositivo"}
       </h2>
 
-      {/* Campos en grid similar a la interfaz */}
+      {/* Campos en grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {["crear", "modificar"].includes(mode) && (
           <>
@@ -184,7 +216,7 @@ export default function DispositivoForm({ mode = "crear" }) {
                 className={`border p-2 w-full rounded ${errores.tipo ? "border-red-500" : "border-gray-300"}`}
               >
                 <option value="">Seleccione tipo</option>
-                {enums.tipo.map((t) => <option key={t} value={t}>{t}</option>)}
+                {tipos.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               {errores.tipo && <p className="text-red-500 text-sm">{errores.tipo}</p>}
             </div>
@@ -197,10 +229,14 @@ export default function DispositivoForm({ mode = "crear" }) {
                 className={`border p-2 w-full rounded ${errores.marca ? "border-red-500" : "border-gray-300"}`}
               >
                 <option value="">Seleccione marca</option>
-                {enums.marca.map((m) => <option key={m} value={m}>{m}</option>)}
+                {marcas.map((m) => (
+                <option key={m.id} value={m.id}>
+               {m.nombre}
+               </option>
+               ))}
               </select>
               {errores.marca && <p className="text-red-500 text-sm">{errores.marca}</p>}
-            </div>
+               </div>
 
             <div className="space-y-2">
               <label className="font-semibold">Sala *</label>
@@ -210,7 +246,7 @@ export default function DispositivoForm({ mode = "crear" }) {
                 className={`border p-2 w-full rounded ${errores.ubicacion ? "border-red-500" : "border-gray-300"}`}
               >
                 <option value="">Seleccione sala</option>
-                {enums.sala.map((s) => <option key={s} value={s}>{s}</option>)}
+                {salas.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
               {errores.ubicacion && <p className="text-red-500 text-sm">{errores.ubicacion}</p>}
             </div>
@@ -223,7 +259,7 @@ export default function DispositivoForm({ mode = "crear" }) {
                 className={`border p-2 w-full rounded ${errores.estado ? "border-red-500" : "border-gray-300"}`}
               >
                 <option value="">Seleccione estado</option>
-                {enums.estado.map((e) => <option key={e} value={e}>{e}</option>)}
+                {estados.map((e) => <option key={e} value={e}>{e}</option>)}
               </select>
               {errores.estado && <p className="text-red-500 text-sm">{errores.estado}</p>}
             </div>

@@ -8,11 +8,11 @@ export default function Sidebar() {
 
 
   const menus = [
-    { icon: <Home />, label: "Escritorio" },
+    { icon: <Home />, label: "Escritorio", path: "/dashboard"  },
 
     { icon: <Settings />, label: "Recursos", 
     submenus: [
-      { label: "Dispositivos", path: "/dispositivos" },
+      { label: "Dispositivos", path: "/gestionardispositivos" },
       { label: "Marcas", path: "/marcas" },
 
     ],},
