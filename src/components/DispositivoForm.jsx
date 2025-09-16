@@ -29,7 +29,7 @@ export default function DispositivoForm({ mode = "crear" }) {
     "Sala Multimedia 3",
     "Otro"
   ];
-  const estados = ["Activo", "Inactivo", "En reparación"];
+  const estados = ["activo", "baja", "en reparacion"];
 
     // Fetch de marcas
   useEffect(() => {
@@ -94,10 +94,13 @@ export default function DispositivoForm({ mode = "crear" }) {
     if (!validarCampos()) return;
     try {
       const res = await fetch("http://localhost:8000/api/dispositivos", {
-        method: "POST",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        body: JSON.stringify(dispositivo),});
+      method: "POST",
+      headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(dispositivo),
+      });
       if (!res.ok) throw new Error("Error al crear dispositivo");
       setMensaje("Dispositivo creado correctamente");
       setDispositivo({
@@ -185,7 +188,7 @@ export default function DispositivoForm({ mode = "crear" }) {
             </div>
 
             <div className="space-y-2">
-              <label className="font-semibold">Descripción *</label>
+              <label className="font-semibold">Descripción</label>
               <input
                 type="text"
                 placeholder="Ingrese descripción"
@@ -230,7 +233,7 @@ export default function DispositivoForm({ mode = "crear" }) {
               >
                 <option value="">Seleccione marca</option>
                 {marcas.map((m) => (
-                <option key={m.id} value={m.id}>
+                <option key={m.id} value={m.nombre}>
                {m.nombre}
                </option>
                ))}
@@ -259,7 +262,11 @@ export default function DispositivoForm({ mode = "crear" }) {
                 className={`border p-2 w-full rounded ${errores.estado ? "border-red-500" : "border-gray-300"}`}
               >
                 <option value="">Seleccione estado</option>
-                {estados.map((e) => <option key={e} value={e}>{e}</option>)}
+                {estados.map((e) => (
+                <option key={e} value={e}>
+                {e.charAt(0).toUpperCase() + e.slice(1)}
+                </option>
+                ))}
               </select>
               {errores.estado && <p className="text-red-500 text-sm">{errores.estado}</p>}
             </div>

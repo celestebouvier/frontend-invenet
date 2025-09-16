@@ -8,6 +8,8 @@ import GestionarDispositivos from "./pages/GestionarDispositivos";
 import IngresarDispositivo from "./pages/IngresarDispositivo";
 import ModificarDispositivo from "./pages/ModificarDispositivo";
 import EliminarDispositivo from "./pages/EliminarDispositivo";
+import BuscarDispositivo from "./components/BuscarDispositivo";
+
 
 function App() {
   return (
@@ -20,6 +22,12 @@ function App() {
       <Route path="/dispositivos/" element={<IngresarDispositivo />} />
       <Route path="/dispositivos/modificar/:id" element={<ModificarDispositivo />} />
       <Route path="/dispositivos/eliminar/:id" element={<EliminarDispositivo />} />
+      <Route path="/dispositivos/buscar" element={<BuscarDispositivo />} />
+
+      <Route path="/gestionarmarcas" element={<GestionarMarcas />} />
+      <Route path="/marcas/" element={<IngresarMarca />} />
+      <Route path="/marcas/eliminar/:id" element={<EliminarMarca />} />
+      <Route path="/marcas/buscar" element={<BuscarMarca />} />
     </Routes>
   );
 }
