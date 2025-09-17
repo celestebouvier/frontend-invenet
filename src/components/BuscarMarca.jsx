@@ -1,87 +1,41 @@
 import { useState } from "react";
+import { findMarcaByName } from "../services/marcaService";
 import { useNavigate } from "react-router-dom";
-import Button from "./Button";
 
 export default function BuscarMarca() {
-  const [codigo, setCodigo] = useState("");
+  const [nombre, setNombre] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const handleBuscar = async () => {
-    setError(null);
-    const id = codigo?.toString().trim();
-    if (!id) {
-      setError("Ingrese un código válido");
-      return;
-    }
-
-    if (!token) {
-      setError("Debe iniciar sesión para eliminar una marca");
-      return;
-    }
-
-    setLoading(true);
     try {
-      // Verificar que la marca exista
-      const res = await fetch(`http://localhost:8000/api/marcas/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      });
-      setLoading(false);
-
-      if (!res.ok) {
-        if (res.status === 404) {
-          setError("Marca no encontrada");
-          return;
-        }
-        if (res.status === 401 || res.status === 403) {
-          setError("No autorizado para eliminar esta marca");
-          return;
-        }
-        setError("Error al verificar la marca");
-        return;
+      const marca = await findMarcaByName(nombre);
+      if (!marca) {
+        setError("Marca no encontrada");
+      } else {
+        navigate(`/eliminar-marca/${marca.id}`);
       }
-
-      // Marca existe → redirigir a eliminar
-      navigate(`/marcas/eliminar/${id}`);
-    } catch (err) {
-      setLoading(false);
-      setError("Error de red. Intentá de nuevo");
-      console.error(err);
+    } catch {
+      setError("Error al buscar marca");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">Eliminar marca</h2>
-
-      <label className="block font-medium mb-2">Código de la marca (ID)</label>
+    <div className="space-y-4">
       <input
-        type="number"
-        inputMode="numeric"
-        value={codigo}
-        onChange={(e) => setCodigo(e.target.value)}
-        placeholder="Ingrese ID (ej: 4)"
-        className="w-full border p-2 rounded mb-4"
+        type="text"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+        placeholder="Nombre de la marca"
+        className="border p-2 rounded w-full"
       />
-
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-
-      <div className="flex gap-3">
-        <Button text="Aceptar" onClick={handleBuscar} className="flex-1" />
-        <button
-          onClick={() => navigate(-1)}
-          className="px-4 py-2 border rounded bg-gray-100"
-        >
-          Cancelar
-        </button>
-      </div>
-
-      {loading && <p className="mt-2 text-sm text-gray-500">Verificando...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+      <button
+        onClick={handleBuscar}
+        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Buscar y Eliminar
+      </button>
     </div>
   );
 }

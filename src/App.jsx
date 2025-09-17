@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -9,6 +9,10 @@ import IngresarDispositivo from "./pages/IngresarDispositivo";
 import ModificarDispositivo from "./pages/ModificarDispositivo";
 import EliminarDispositivo from "./pages/EliminarDispositivo";
 import BuscarDispositivo from "./components/BuscarDispositivo";
+import GestionarMarcas from "./pages/GestionarMarcas";
+import IngresarMarca from "./pages/IngresarMarca";
+import EliminarMarca from "./pages/EliminarMarca";
+import BuscarMarca from "./components/BuscarMarca";
 
 
 function App() {
@@ -25,9 +29,9 @@ function App() {
       <Route path="/dispositivos/buscar" element={<BuscarDispositivo />} />
 
       <Route path="/gestionarmarcas" element={<GestionarMarcas />} />
-      <Route path="/marcas/" element={<IngresarMarca />} />
-      <Route path="/marcas/eliminar/:id" element={<EliminarMarca />} />
-      <Route path="/marcas/buscar" element={<BuscarMarca />} />
+      <Route path="/ingresar-marca" element={<IngresarMarca />} />
+      <Route path="/eliminar-marca/:id" element={<EliminarMarca />} />
+      <Route path="/buscar-marca" element={<BuscarMarca />} />
     </Routes>
   );
 }

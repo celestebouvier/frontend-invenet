@@ -1,22 +1,24 @@
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import { useAuth } from "../hooks/useAuth";
 import MarcaForm from "../components/MarcaForm";
+import { createMarca } from "../services/marcaService";
+import { useNavigate } from "react-router-dom";
 
 export default function IngresarMarca() {
-  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleCreate = async (nombre) => {
+    try {
+      await createMarca(nombre);
+      alert("Marca creada con éxito");
+      navigate("/gestionar-marcas");
+    } catch {
+      alert("Error al crear marca");
+    }
+  };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Header user={user} logout={logout} />
-        <main className="p-6">
-          {/* MarcaForm en modo crear */}
-          <MarcaForm mode="crear" />
-        </main>
-      </div>
+    <div className="p-6">
+      <h2 className="text-xl font-bold mb-4">Ingresar Nueva Marca</h2>
+      <MarcaForm onSubmit={handleCreate} />
     </div>
   );
 }
-
