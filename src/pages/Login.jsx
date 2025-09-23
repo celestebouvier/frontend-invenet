@@ -3,13 +3,14 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import { useAuth } from "../hooks/useAuth";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const { login } = useAuth(); // login viene del contexto
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -51,14 +52,12 @@ export default function Login() {
             className="text-base py-2"
           />
         </div>
-        <div className="mt-4 text-center">
-          <a
-            href="/password/send-code"
-            className="text-sm text-blue-600 hover:underline"
-          >
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
+        <p
+        onClick={() => navigate("/recover-password")}
+        className="text-sm text-green-700 cursor-pointer mt-2"
+>
+         ¿Olvidaste tu contraseña?
+        </p>
       </Card>
     </div>
   );

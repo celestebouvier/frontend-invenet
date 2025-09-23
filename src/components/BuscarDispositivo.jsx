@@ -2,6 +2,9 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "./Button";
+import { useAuth } from "../hooks/useAuth";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
 export default function BuscarDispositivo() {
   const [codigo, setCodigo] = useState("");
@@ -9,8 +12,9 @@ export default function BuscarDispositivo() {
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
-  // action puede ser 'modificar' o 'eliminar'. Default: modificar
+  // puede ser 'modificar' o 'eliminar'. 
   const action = searchParams.get("action") || "modificar";
 
   const token = localStorage.getItem("token");
@@ -23,7 +27,7 @@ export default function BuscarDispositivo() {
       return;
     }
 
-    // Opcional: verificar que exista el dispositivo antes de redirigir
+    // Verificar que exista el dispositivo antes de redirigir
     if (token) {
       setLoading(true);
       try {
@@ -54,12 +58,19 @@ export default function BuscarDispositivo() {
         console.error(err);
       }
     } else {
-      // Si no hay token, igual lo llevamos (o podrías forzar login)
+      // Si no hay token, igual lo llevamos 
       navigate(`/dispositivos/${action}/${id}`);
     }
   };
 
   return (
+    <div className="flex h-screen bg-gray-100">
+                  <Sidebar />
+            
+    <div className="flex-1 flex flex-col">
+                  <Header user={user} logout={logout} />
+
+
     <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
       <h2 className="text-2xl font-bold mb-4">
         {action === "eliminar" ? "Eliminar dispositivo" : "Modificar dispositivo"}
@@ -88,6 +99,8 @@ export default function BuscarDispositivo() {
       </div>
 
       {loading && <p className="mt-2 text-sm text-gray-500">Verificando...</p>}
+    </div>
+    </div>
     </div>
   );
 }

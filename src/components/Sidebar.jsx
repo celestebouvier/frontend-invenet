@@ -13,7 +13,7 @@ export default function Sidebar() {
     { icon: <Settings />, label: "Recursos", 
     submenus: [
       { label: "Dispositivos", path: "/gestionardispositivos" },
-      { label: "Marcas", path: "/gestionarmarcas" },
+      { label: "Marcas", path: "/gestionar-marcas" },
 
     ],},
 

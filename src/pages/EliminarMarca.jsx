@@ -1,3 +1,4 @@
+// src/pages/EliminarMarca.jsx
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useParams, useNavigate } from "react-router-dom";
@@ -17,8 +18,15 @@ export default function EliminarMarca() {
       await deleteMarca(id);
       alert("Marca eliminada con éxito");
       navigate("/gestionar-marcas");
-    } catch {
-      alert("Error al eliminar marca");
+    } catch (err) {
+      if (err.status === 404) {
+        alert("Marca no encontrada");
+      } else if (err.status === 401) {
+        alert("No autorizado. Inicia sesión nuevamente.");
+        navigate("/");
+      } else {
+        alert(err.message || "Error al eliminar marca");
+      }
     } finally {
       setLoading(false);
     }
@@ -26,21 +34,23 @@ export default function EliminarMarca() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-          <Sidebar />
-           <div className="flex-1 flex flex-col">
-            <Header user={user} logout={logout} />
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Eliminar Marca</h2>
-      <p>¿Seguro que deseas eliminar la marca con ID {id}?</p>
-      <button
-        onClick={handleDelete}
-        disabled={loading}
-        className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-      >
-        {loading ? "Eliminando..." : "Eliminar"}
-      </button>
-      </div>
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        <Header user={user} logout={logout} />
+
+        <div className="p-6">
+          <h2 className="text-xl font-bold mb-4">Eliminar Marca</h2>
+          <p>¿Seguro que deseas eliminar la marca con ID {id}?</p>
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 disabled:opacity-60"
+          >
+            {loading ? "Eliminando..." : "Eliminar"}
+          </button>
+        </div>
       </div>
     </div>
   );
 }
+

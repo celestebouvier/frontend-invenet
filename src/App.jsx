@@ -13,7 +13,9 @@ import GestionarMarcas from "./pages/GestionarMarcas";
 import IngresarMarca from "./pages/IngresarMarca";
 import EliminarMarca from "./pages/EliminarMarca";
 import BuscarMarca from "./components/BuscarMarca";
-
+import RecoverPassword from "./pages/RecoverPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyCode from "./pages/VerifyCode";
 
 function App() {
   return (
@@ -28,10 +30,14 @@ function App() {
       <Route path="/dispositivos/eliminar/:id" element={<EliminarDispositivo />} />
       <Route path="/dispositivos/buscar" element={<BuscarDispositivo />} />
 
-      <Route path="/gestionarmarcas" element={<GestionarMarcas />} />
+      <Route path="/gestionar-marcas" element={<GestionarMarcas />} />
       <Route path="/ingresar-marca" element={<IngresarMarca />} />
       <Route path="/eliminar-marca/:id" element={<EliminarMarca />} />
       <Route path="/buscar-marca" element={<BuscarMarca />} />
+
+      <Route path="/recover-password" element={<RecoverPassword />} />
+      <Route path="/verify-code" element={<VerifyCode />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 }
