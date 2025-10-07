@@ -13,7 +13,7 @@ export default function VerifyCode() {
     e.preventDefault();
     try {
       await verifyRecoveryCode(email, code);
-      navigate("/reset-password", { state: { email } });
+      navigate("/reset-password", { state: { email, code } }); // ✅ Pasamos también el código
     } catch {
       setError("El código es incorrecto");
     }
@@ -47,3 +47,4 @@ export default function VerifyCode() {
     </div>
   );
 }
+

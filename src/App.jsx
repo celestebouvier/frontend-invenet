@@ -16,13 +16,18 @@ import BuscarMarca from "./components/BuscarMarca";
 import RecoverPassword from "./pages/RecoverPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyCode from "./pages/VerifyCode";
+import Perfil from "./pages/Perfil";
+import ConsultarDispositivos from "./pages/ConsultarDispositivos";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/perfil" element={<Perfil />} />
       <Route path="/usuarios/:id" element={<ModificarDatosUsuario />} />
+
+
       <Route path="*" element={<NotFound />} />
       <Route path="/gestionardispositivos" element={<GestionarDispositivos />} />
       <Route path="/dispositivos/" element={<IngresarDispositivo />} />
@@ -38,6 +43,8 @@ function App() {
       <Route path="/recover-password" element={<RecoverPassword />} />
       <Route path="/verify-code" element={<VerifyCode />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+
+      <Route path="/inventario" element={<ConsultarDispositivos />} />
     </Routes>
   );
 }

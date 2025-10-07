@@ -2,11 +2,15 @@ import { UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Header({ user, logout }) {
+  // Si el usuario aún no está cargado, no muestra el botón de modificar
+  if (!user) return null;
+
+
   return (
     <header className="bg-[#08782b] text-white flex justify-end items-center px-6 py-3 shadow">
       <div className="flex items-center gap-6">
         {/* Botón con icono que redirige a /usuarios/:id */}
-        <Link to={`/usuarios/${user?.id}`} className="flex items-center gap-2 text-white">
+        <Link to="/perfil" className="flex items-center gap-2 text-white">
           <UserRound className="w-5 h-5" />
           <span className="hidden sm:inline font-small">Modificar datos personales</span>
         </Link>

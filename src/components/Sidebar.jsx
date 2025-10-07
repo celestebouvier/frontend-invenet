@@ -29,7 +29,7 @@ export default function Sidebar() {
 
     { icon: <FileText />, label: "Consultas",
      submenus: [
-      { label: "Dispositivos", path: "/dispositivos" },
+      { label: "Dispositivos", path: "/inventario" },
       { label: "Usuarios", path: "/usuarios" },
       { label: "Reparaciones", path: "/ordenes/resumen" },
     ],},

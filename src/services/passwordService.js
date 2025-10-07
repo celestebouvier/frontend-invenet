@@ -23,11 +23,11 @@ export async function verifyRecoveryCode(email, code) {
 }
 
 // Resetear contraseña
-export async function resetPassword(email, password, password_confirmation) {
+export async function resetPassword(email, code, password, password_confirmation) {
   const res = await fetch(`${API_URL}/password/reset`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ email, password, password_confirmation }),
+    body: JSON.stringify({ email, code, password, password_confirmation }),
   });
   if (!res.ok) throw new Error("Error al resetear contraseña");
   return await res.json();
