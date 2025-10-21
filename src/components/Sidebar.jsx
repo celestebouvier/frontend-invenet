@@ -19,9 +19,8 @@ export default function Sidebar() {
 
     { icon: <Wrench />, label: "Reparaciones",
     submenus: [
-      { label: "Reportar anomalía", path: "/reportes" },
-      { label: "Ver reportes", path: "/reportes" },
-      { label: "Generar orden de reparación ", path: "/ordenes" },
+      { label: "Reportar anomalía", path: "/reportar-anomalia" },
+      { label: "Ver reportes", path: "/ver-reportes" },
       { label: "Ver órdenes de reparación ", path: "/ordenes" },
     ],},
 
@@ -42,7 +41,7 @@ export default function Sidebar() {
        setOpen(false);
        setOpenMenu(null); // Cierra submenús al salir del sidebar
        }}
-      className={`bg-black text-white h-screen p-3 transition-all ${
+      className={`bg-black text-white h-screen p-3 transition-all font-bold${
         open ? "w-50" : "w-15"
       }`}>
     
@@ -59,14 +58,14 @@ export default function Sidebar() {
                 {/* Menú con submenús */}
                 <div
                   onClick={() => setOpenMenu(openMenu === i ? null : i)}
-                  className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded transition-all"
+                  className="flex items-center gap-3 cursor-pointer hover:bg-gray-700 p-2 rounded transition-all font-bold"
                 >
                   {menu.icon}
                   {open && <span>{menu.label}</span>}
                 </div>
 
                 {open && openMenu === i && (
-                  <ul className="ml-8 mt-1 space-y-1">
+                  <ul className="pl-4 mt-1 space-y-1">
                     {menu.submenus.map((sub, idx) => (
                       <li key={idx}>
                         <Link
@@ -84,7 +83,7 @@ export default function Sidebar() {
               // Menú con enlace directo
               <Link
                 to={menu.path}
-                className="flex items-center gap-3 hover:bg-gray-700 p-2 rounded transition-all"
+                className="flex items-center gap-3 hover:bg-gray-700 p-2 rounded transition-all font-bold"
               >
                 {menu.icon}
                 {open && <span>{menu.label}</span>}

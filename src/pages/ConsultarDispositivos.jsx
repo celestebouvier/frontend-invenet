@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import Button from "../components/Button";
 import { Printer } from "lucide-react";
 import DetalleDispositivo from "./DetalleDispositivo";
+import { useNavigate } from "react-router-dom";
 
 export default function ConsultarDispositivos() {
   const { user, logout } = useAuth();
@@ -16,6 +17,8 @@ export default function ConsultarDispositivos() {
   const [selectedDispositivo, setSelectedDispositivo] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const navigate = useNavigate();
+
 
   // Listas de opciones fijas
   const ubicaciones = [
@@ -60,8 +63,10 @@ export default function ConsultarDispositivos() {
 
   // Ver detalle (abre modal)
   const handleVerDetalle = (id) => {
-    const dispositivo = dispositivos.find((d) => d.id === id);
-    setSelectedDispositivo(dispositivo);
+    navigate(`/dispositivo/${id}/pdf`);
+        // Detecta automáticamente el dominio del backend
+  //const backendUrl = import.meta.env.VITE_API_URL || window.location.origin.replace(':5173', ':8000');
+  //window.open(`${backendUrl}/api/dispositivos/${id}/ver-qr`, '_blank');
   };
 
   // Filtros

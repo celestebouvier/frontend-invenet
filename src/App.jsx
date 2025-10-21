@@ -18,6 +18,16 @@ import ResetPassword from "./pages/ResetPassword";
 import VerifyCode from "./pages/VerifyCode";
 import Perfil from "./pages/Perfil";
 import ConsultarDispositivos from "./pages/ConsultarDispositivos";
+import ReportarAnomalia from "./pages/ReportarAnomalia";
+import VerReportes from "./pages/VerReportes";
+import CrearOrdenReparacion from "./pages/CrearOrdenReparacion";
+import DetallePDF from "./pages/DetallePDF";
+import GestionUsuarios from "./pages/GestionUsuarios";
+import IngresarUsuario from "./pages/IngresarUsuario";
+import ModificarUsuario from "./pages/ModificarUsuario";
+import EliminarUsuario from "./pages/EliminarUsuario";
+
+
 
 function App() {
   return (
@@ -35,6 +45,8 @@ function App() {
       <Route path="/dispositivos/eliminar/:id" element={<EliminarDispositivo />} />
       <Route path="/dispositivos/buscar" element={<BuscarDispositivo />} />
 
+      <Route path="/dispositivo/:id/pdf" element={<DetallePDF />} />
+
       <Route path="/gestionar-marcas" element={<GestionarMarcas />} />
       <Route path="/ingresar-marca" element={<IngresarMarca />} />
       <Route path="/eliminar-marca/:id" element={<EliminarMarca />} />
@@ -45,6 +57,16 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
 
       <Route path="/inventario" element={<ConsultarDispositivos />} />
+
+      <Route path="/reportar-anomalia" element={<ReportarAnomalia />} />
+      <Route path="/ver-reportes" element={<VerReportes />} />  
+      <Route path="/ordenes/crear/:reporteId" element={<CrearOrdenReparacion />} />
+      
+      <Route path="/usuarios" element={<GestionUsuarios />} />
+      <Route path="/usuarios/ingresar" element={<IngresarUsuario />} />
+      <Route path="/usuarios/modificar" element={<ModificarUsuario />} />
+      <Route path="/usuarios/eliminar" element={<EliminarUsuario />} />
+
     </Routes>
   );
 }
