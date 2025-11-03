@@ -16,8 +16,9 @@ export default function ReportarAnomalia() {
   // Obtener lista de dispositivos
   useEffect(() => {
     const fetchDispositivos = async () => {
+      console.log("Token usado:", token);
       try {
-        const res = await fetch("http://localhost:8000/api/inventario", {
+      const res = await fetch("http://127.0.0.1:8000/api/inventario", {
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
@@ -64,7 +65,7 @@ export default function ReportarAnomalia() {
       if (!response.ok) throw new Error("Error al enviar el reporte.");
 
       const data = await response.json();
-      setMensaje(`Reporte #${data.reporte_id} enviado correctamente. Estado: pendiente`); 
+      setMensaje(`Reporte #${data.id} enviado correctamente. Estado: pendiente`);
       setSelectedDispositivo("");
       setDescripcion("");
     } catch (err) {

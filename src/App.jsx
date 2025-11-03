@@ -26,6 +26,8 @@ import GestionUsuarios from "./pages/GestionUsuarios";
 import IngresarUsuario from "./pages/IngresarUsuario";
 import ModificarUsuario from "./pages/ModificarUsuario";
 import EliminarUsuario from "./pages/EliminarUsuario";
+import VerOrdenes from "./pages/VerOrdenes";
+import DetalleOrdenPDF from "./pages/DetalleOrdenPDF";
 
 
 
@@ -61,6 +63,9 @@ function App() {
       <Route path="/reportar-anomalia" element={<ReportarAnomalia />} />
       <Route path="/ver-reportes" element={<VerReportes />} />  
       <Route path="/ordenes/crear/:reporteId" element={<CrearOrdenReparacion />} />
+
+      <Route path="/ordenes" element={<VerOrdenes />} />
+      <Route path="/ordenes/:id/pdf" element={<DetalleOrdenPDF />} />
       
       <Route path="/usuarios" element={<GestionUsuarios />} />
       <Route path="/usuarios/ingresar" element={<IngresarUsuario />} />

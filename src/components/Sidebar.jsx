@@ -30,7 +30,7 @@ export default function Sidebar() {
      submenus: [
       { label: "Dispositivos", path: "/inventario" },
       { label: "Usuarios", path: "/usuarios" },
-      { label: "Reparaciones", path: "/ordenes/resumen" },
+      { label: "Resumen de reparaciones", path: "/ordenes/resumen" },
     ],},
   ];
 
