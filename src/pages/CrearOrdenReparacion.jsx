@@ -20,7 +20,7 @@ export default function CrearOrdenReparacion() {
   const [loading, setLoading] = useState(true);
   const [mensaje, setMensaje] = useState("");
 
-  // Cargar datos del reporte seleccionado y técnicos disponibles
+  // Cargar datos...
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,17 +60,21 @@ export default function CrearOrdenReparacion() {
 
     try {
       setMensaje("Generando orden...");
+
+      // Ensure we send the logged-in user's id when modo === "local"
+      const payload = {
+        reporte_id: reporteId,
+        tecnico_id: modo === "local" ? user.id : tecnicoId,
+        descripcion,
+      };
+
       const res = await fetch("http://localhost:8000/api/ordenes", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          reporte_id: reporteId,
-          tecnico_id: modo === "local" ? user.id : tecnicoId,
-          descripcion,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error("Error al generar la orden.");
@@ -86,15 +90,15 @@ export default function CrearOrdenReparacion() {
         body: JSON.stringify({ estado: "revisado" }),
       });
 
-      setMensaje("Orden creada correctamente. Generando PDF...");
+      setMensaje("Orden creada correctamente. Generando vista imprimible...");
 
-      // Abrir PDF generado
+      // Open printable HTML served by backend (web route)
       const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
-      window.open(`${backendUrl}/ordenes/${orden.id}/ver`, "_blank");
+      window.open(`${backendUrl}/ordenes/${orden.id}/ver`, "_blank", "noopener,noreferrer");
 
       setTimeout(() => {
         navigate("/ver-reportes");
-      }, 2000);
+      }, 1200);
     } catch (error) {
       console.error("Error:", error);
       setMensaje("Error al crear la orden.");
@@ -107,7 +111,6 @@ export default function CrearOrdenReparacion() {
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
-
       <div className="flex-1 flex flex-col">
         <Header user={user} logout={logout} />
 
