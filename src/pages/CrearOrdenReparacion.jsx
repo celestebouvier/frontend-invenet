@@ -89,7 +89,8 @@ export default function CrearOrdenReparacion() {
       setMensaje("Orden creada correctamente. Generando PDF...");
 
       // Abrir PDF generado
-      window.open(`http://localhost:8000/api/ordenes/${orden.id}/pdf`, "_blank");
+      const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      window.open(`${backendUrl}/ordenes/${orden.id}/ver`, "_blank");
 
       setTimeout(() => {
         navigate("/ver-reportes");

@@ -2,19 +2,18 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
 /**
- * List all orders and allow opening PDF detail
+ * List all orders and allow opening PDF/detail page
  */
 export default function VerOrdenes() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [ordenes, setOrdenes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Resolve backend URL once (avoids using import.meta.env inside JSX callbacks)
   const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   useEffect(() => {
@@ -45,9 +44,9 @@ export default function VerOrdenes() {
     fetchOrdenes();
   }, [token, backendUrl]);
 
-  const abrirPdf = (id) => {
-    // navigate to a page that shows the PDF in an iframe
-    navigate(`/ordenes/${id}/pdf`);
+  const abrirOrdenEnPestana = (id) => {
+    const url = `${backendUrl}/ordenes/${id}/ver`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -92,10 +91,11 @@ export default function VerOrdenes() {
                         <td className="p-2">
                           <div className="flex justify-center gap-2">
                             <button
-                              onClick={() => abrirPdf(o.id)}
+                              onClick={() => abrirOrdenEnPestana(o.id)}
                               className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800 flex items-center gap-2"
+                              type="button"
                             >
-                              Ver PDF
+                              Ver / Imprimir
                             </button>
                           </div>
                         </td>
